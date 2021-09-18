@@ -22,22 +22,22 @@ public class mainScreenController implements Initializable {
 
     }
 
-
+    /** Handles deleting an appointment. */
     public void deleteAppointmentHandler(ActionEvent actionEvent) {
     }
-
+    /** Handles modifying an appointment. */
     public void modifyAppointmentHandler(ActionEvent actionEvent) {
     }
-
+    /** Handles adding an appointment. */
     public void addAppointmentHandler(ActionEvent actionEvent) {
     }
-
+    /** Handles deleting a customer. */
     public void deleteCustomerHandler(ActionEvent actionEvent) {
     }
-
+    /** Handles modifying a customer. */
     public void modifyCustomerHandler(ActionEvent actionEvent) {
     }
-
+    /** Handles adding a customer. */
     public void addCustomerHandler(ActionEvent actionEvent) {
     }
 }
