@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.JDBC;
 
+import java.sql.*;
+
 public class Main extends Application {
 
     @Override
@@ -17,9 +19,27 @@ public class Main extends Application {
         primaryStage.show();
     }
 
+    public static void printQuery() throws SQLException{
+        Connection c = JDBC.getConnection();
+        Statement st = c.createStatement();
+        ResultSet rs = st.executeQuery("select * from customers");
 
-    public static void main(String[] args) {
-        //JDBC.makeConnection();
+        ResultSetMetaData metaData = rs.getMetaData();
+        int columnCount = metaData.getColumnCount();
+
+        while(rs.next()) {
+            for(int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+                Object object = rs.getObject(columnIndex);
+                System.out.printf("%s, ", object == null ? "NULL" : object.toString());
+            }
+            System.out.printf("%n");
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        JDBC.makeConnection();
+        //printQuery();
         launch(args);
+
     }
 }
