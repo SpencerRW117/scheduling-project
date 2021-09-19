@@ -12,6 +12,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.JDBC;
+import model.User;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,10 +30,11 @@ public class loginScreenController implements Initializable {
     public Button loginScreenExitButton;
 
 
-    /** Handles the submit credentials event from the login screen. */
+    /** Handles the submit credentials event from the login screen and passes the valid user to the dashboard. */
     public void loginScreenSubmitHandler (ActionEvent actionEvent) throws Exception {
-        boolean validLogin = validateCredentials();
-        if(validLogin){
+        User validUser = validateCredentials();
+        if(validUser != null){
+            mainScreenController.passTheUser(validUser);
             goToMainScreen(actionEvent);
         }
 
@@ -40,29 +42,30 @@ public class loginScreenController implements Initializable {
     }
 
     /** Validates the credentials against the database. */
-    private boolean validateCredentials() throws SQLException {
+    private User validateCredentials() throws SQLException {
         Connection c = JDBC.getConnection();
         Statement st = c.createStatement();
-        String userNameAndPassQuery = "SELECT User_Name, Password FROM users";
+        String userNameAndPassQuery = "SELECT User_ID, User_Name, Password FROM users";
         ResultSet rs = st.executeQuery(userNameAndPassQuery);
         String enteredUserName = loginScreenUsernameField.getText();
         String enteredUserPassword = loginScreenPasswordField.getText();
         //System.out.println("STUFF: " + enteredUserPassword + enteredUserName); //Debugging print
         while(rs.next()) {
-            String currUserName = rs.getString(1);
-            String currPassword = rs.getString(2);
+            int currUserID = rs.getInt(1);
+            String currUserName = rs.getString(2);
+            String currPassword = rs.getString(3);
             //System.out.println("STUFF 2: " + currPassword + currUserName); //Debugging print
             if (currUserName.equals(enteredUserName) && currPassword.equals(enteredUserPassword)) {
-                return true;
+                User u = new User(currUserID, currUserName, currPassword);
+                return u;
             }
         }
-
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Invalid Credentials");
         alert.setHeaderText(null);
         alert.setContentText("Invalid login credentials, please enter a valid username and password.");
         alert.show();
-        return false;
+        return null;
     }
 
     /** Changes the scene to the main dashboard. */

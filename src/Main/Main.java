@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import model.JDBC;
 
 import java.sql.*;
+import java.util.Locale;
 
 public class Main extends Application {
 
@@ -19,6 +20,7 @@ public class Main extends Application {
         primaryStage.show();
     }
 
+    /** This is a throwaway function that tests SQL querying and printing. */
     public static void printQuery() throws SQLException{
         Connection c = JDBC.getConnection();
         Statement st = c.createStatement();
@@ -38,7 +40,8 @@ public class Main extends Application {
 
     public static void main(String[] args) throws Exception {
         JDBC.makeConnection();
-        //printQuery();
+        //Locale.setDefault(new Locale("fr")); //French translation test
+        //printQuery(); //SQL printing test
         launch(args);
 
     }
