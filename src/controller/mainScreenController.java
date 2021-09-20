@@ -3,17 +3,23 @@ package controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import model.Appointment;
 import model.Customer;
 import model.JDBC;
 import model.User;
 
 import javax.swing.plaf.nimbus.State;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -85,7 +91,17 @@ public class mainScreenController implements Initializable {
     public void modifyCustomerHandler(ActionEvent actionEvent) {
     }
     /** Handles adding a customer. */
-    public void addCustomerHandler(ActionEvent actionEvent) {
+    public void addCustomerHandler(ActionEvent actionEvent) throws IOException {
+        goToAddCustomerScreen(actionEvent);
+    }
+    /** Displays the add customer form. */
+    private void goToAddCustomerScreen(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/view/addCustomerScreen.fxml"));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 474, 699);
+        stage.setTitle("Scheduling Software");
+        stage.setScene(scene);
+        stage.show();
     }
     /** Populates the appointments table with all appointments associated with the logged in user. */
     private ObservableList<Appointment> getUserAppointments() throws Exception{

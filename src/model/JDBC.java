@@ -1,8 +1,8 @@
 package model;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.sql.*;
 
 public class JDBC {
         private static final String protocol = "jdbc";
@@ -56,6 +56,29 @@ public class JDBC {
            else System.out.println("Null reference to Prepared Statement");
            return null;
        }
+
+    public static ObservableList<Customer> getCustomers() throws Exception{
+        ObservableList<Customer> returnCustomers = FXCollections.observableArrayList();
+        Connection c = JDBC.getConnection();
+        Statement st = c.createStatement();
+        String query = "SELECT * FROM customers";
+        ResultSet rs = st.executeQuery(query);
+        while(rs.next()){
+            Customer tempCus = new Customer(
+                    rs.getInt("Customer_ID"),
+                    rs.getString("Customer_Name"),
+                    rs.getString("Address"),
+                    rs.getString("Postal_Code"),
+                    rs.getString("Phone"),
+                    rs.getTimestamp("Create_Date"),
+                    rs.getString("Created_By"),
+                    rs.getTimestamp("Last_Update"),
+                    rs.getString("Last_Updated_By"),
+                    rs.getInt("Division_ID"));
+            returnCustomers.add(tempCus);
+        }
+        return returnCustomers;
+    }
 
 
 

@@ -69,7 +69,7 @@ public class loginScreenController implements Initializable {
     }
 
     /** Changes the scene to the main dashboard. */
-    private void goToMainScreen(ActionEvent actionEvent) throws IOException{
+    public void goToMainScreen(ActionEvent actionEvent) throws IOException{
         Parent root = FXMLLoader.load(getClass().getResource("/view/mainScreen.fxml"));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 906, 537);
