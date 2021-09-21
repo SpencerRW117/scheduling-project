@@ -16,23 +16,24 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalDateTimeStringConverter;
 import model.Appointment;
+import model.AppointmentHelpers;
 import model.Contact;
 import model.Customer;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 /** Controls all the behavior for addAppointmentScreen.fxml.
  * @author Spencer Watkins*/
 public class addAppointmentController implements Initializable {
-
-
     public TextField appointmentIDField;
     public TextField appointmentTitleField;
     public TextField appointmentDescriptionField;
@@ -47,34 +48,16 @@ public class addAppointmentController implements Initializable {
     public Button cancelButton;
 
     @Override
+    /** Initializer method, sets the combo box to the appropriate contact names. */
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            contactComboBox.setItems(getContactNames());
+            contactComboBox.setItems(AppointmentHelpers.getContactNames());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    /** Gets the name from a list of contact records to be displayed in the combo box. */
-    private ObservableList<String> getContactNames() throws Exception{
-        ObservableList<String> names = FXCollections.observableArrayList();
-        for(Contact c : DBQueries.getContacts()){
-            names.add(c.getContactName());
-        }
-        return names;
-    }
-    /** Generates a new ID that is always 1 larger than the largest customer ID. */
-    private int newIDGen() throws Exception {
-        ObservableList<Appointment> appts = DBQueries.getAllAppointments();
-        int temp = 0;
-        for (int i = 0; i < appts.size(); i++){
-            if(appts.get(i).getAppointmentID() > temp){
-                temp = appts.get(i).getAppointmentID();
-            }
-        }
-        return temp + 1;
-    }
     /** Returns the matching contact ID from the selected name. */
-    private int contactNameToID() throws Exception {
+    public int contactNameToID() throws Exception {
         String name = (String) contactComboBox.getValue();
         for(Contact c : DBQueries.getContacts()){
             if(c.getContactName().equals(name)){
@@ -83,57 +66,55 @@ public class addAppointmentController implements Initializable {
         }
         return 0;
     }
-    private boolean validDate(String inputDate){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
-        sdf.setLenient(false);
-        try{
-            Date d = sdf.parse(inputDate);
-            return false;
-        } catch (ParseException e) {
-            return false;
-        }
-    }
+
+    /** Handles the "submit" button event. Runs sanity checks on filled data and uploads the new appointment to the database. */
     public void submitNewAppointment(ActionEvent actionEvent) throws Exception {
-        if(!validDate(appointmentStartField.getText()) || !validDate(appointmentEndField.getText())){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Invalid Date Format");
-            alert.setHeaderText(null);
-            alert.setContentText("Either the start or end date (or both) are given in an invalid format.\n" +
-                    "Please provide start and end datetime as follows: \n" +
-                    "Format: \"yyyy-mm-dd hh:mm:ss\" ");
-            alert.show();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        int appointmentID = AppointmentHelpers.newIDGen();
+        String title = appointmentTitleField.getText();
+        String description = appointmentDescriptionField.getText();
+        String location = appointmentLocationField.getText();
+        String type = appointmentTypeField.getText();
+        //Sanity check on the string fields
+        if(title.equals("") || description.equals("") || location.equals("") || type.equals("")){
+            AppointmentHelpers.showError();
             return;
         }
-        int newApptID = newIDGen();
-        String newTitle = appointmentTitleField.getText();
-        String newDescription = appointmentDescriptionField.getText();
-        String newLocation = appointmentLocationField.getText();
-        String newType = appointmentTypeField.getText();
-        Timestamp newStart = Timestamp.valueOf(appointmentStartField.getText());
-        Timestamp newEnd = Timestamp.valueOf(appointmentEndField.getText());
-        Timestamp createDate = new Timestamp(System.currentTimeMillis());
+        //Sanity check on the raw business hours
+        String rawStart = appointmentStartField.getText();
+        String rawEnd = appointmentEndField.getText();
+        if(!AppointmentHelpers.validateBusinessHours(rawStart, rawEnd)){
+            return;
+        }
+        //If the raw stuff in the fields passes validation checks, convert them to UTC and submit.
+        String start = AppointmentHelpers.convertToUTC(rawStart);
+        String end = AppointmentHelpers.convertToUTC(rawEnd);
+
+        String createDate = AppointmentHelpers.convertToUTC(LocalDateTime.now().format(dtf));
         String createdBy = "user";
-        Timestamp lastUpdate = createDate;
+        String lastUpdate = createDate;
         String lastUpdatedBy = createdBy;
         int customerID = Integer.parseInt(customerIDField.getText());
-        int userID = Integer.parseInt(userIDField.getText());
+        int userId = Integer.parseInt(userIDField.getText());
         int contactID = contactNameToID();
+        //Sanity check on FK id's, should never be 0
+        if(customerID == 0 || userId == 0 || contactID == 0){
+            AppointmentHelpers.showError();
+            return;
+        }
+        //If it passes all the previous sanity checks, finally check for overlapping times for the given customer.
+        if(DBQueries.overlappingAppointments(start, end, customerID)){
+            return;
+        }
 
-
-
-        Appointment a = new Appointment(newApptID, newTitle, newDescription, newLocation, newType,
-                newStart, newEnd, createDate, createdBy, lastUpdate, lastUpdatedBy, customerID, userID, contactID);
-
+        Appointment a = new Appointment(appointmentID, title, description, location, type, start, end,
+                createDate, createdBy, lastUpdate, lastUpdatedBy, customerID, userId, contactID);
         DBQueries.insertNewAppointment(a);
         goToMainScreen(actionEvent);
-
     }
-
+    /** Cancels the New Appointment form and returns to the main screen. */
     public void cancelNewAppointment(ActionEvent actionEvent) throws IOException {
         goToMainScreen(actionEvent);
-    }
-
-    public void getContactIDFromName(ActionEvent actionEvent) {
     }
 
     /** Redirects to the main dashboard. */

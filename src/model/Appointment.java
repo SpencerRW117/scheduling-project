@@ -1,151 +1,160 @@
 package model;
 
-import java.sql.Time;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+
 /** An instance of this class represents a single record from the appointments table in the database.
  * @author Spencer Watkins */
 public class Appointment {
+
     private int appointmentID;
     private String title;
     private String description;
     private String location;
     private String type;
-    private Timestamp start;
-    private Timestamp end;
-    private Timestamp createDate;
-    private String createdBy;
-    private Timestamp lastUpdate;
-    private String lastUpdatedBy;
+    private String startDT;
+    private String endDT;
+    private String createDT;
+    private String createMethod;
+    private String lastUpdateDT;
+    private String lastUpdateMethod;
     private int customerID;
     private int userID;
     private int contactID;
-    /** The appointment constructor. */
-    public Appointment(int appointmentID, String title, String description, String location,
-                       String type, Timestamp start, Timestamp end, Timestamp createDate,
-                       String createdBy, Timestamp lastUpdate, String lastUpdatedBy,
+
+    /** Constructor for the appointment class. */
+    public Appointment(int appointmentID, String title, String description, String location, String type, String startDT,
+                       String endDT, String createDT, String createMethod, String lastUpdateDT, String lastUpdateMethod,
                        int customerID, int userID, int contactID) {
         this.appointmentID = appointmentID;
         this.title = title;
         this.description = description;
         this.location = location;
         this.type = type;
-        this.start = start;
-        this.end = end;
-        this.createDate = createDate;
-        this.createdBy = createdBy;
-        this.lastUpdate = lastUpdate;
-        this.lastUpdatedBy = lastUpdatedBy;
+        this.startDT = startDT;
+        this.endDT = endDT;
+        this.createDT = createDT;
+        this.createMethod = createMethod;
+        this.lastUpdateDT = lastUpdateDT;
+        this.lastUpdateMethod = lastUpdateMethod;
         this.customerID = customerID;
         this.userID = userID;
         this.contactID = contactID;
+
+
     }
-    /** Returns the appointment ID. */
+
     public int getAppointmentID() {
         return appointmentID;
     }
-    /** Sets the appointment ID. */
+
     public void setAppointmentID(int appointmentID) {
         this.appointmentID = appointmentID;
     }
-    /** Returns the appointment title. */
+
     public String getTitle() {
         return title;
     }
-    /** Sets the appointment title. */
+
     public void setTitle(String title) {
         this.title = title;
     }
-    /** Returns the appointment description. */
+
     public String getDescription() {
         return description;
     }
-    /** Sets the appointment description. */
-    public void setDescription(String description) { this.description = description; }
-    /** Returns the appointment location. */
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getLocation() {
         return location;
     }
-    /** Sets the appointment location. */
+
     public void setLocation(String location) {
         this.location = location;
     }
-    /** Returns the appointment type. */
+
     public String getType() {
         return type;
     }
-    /** Sets the appointment type. */
+
     public void setType(String type) {
         this.type = type;
     }
-    /** Returns the start time of the appointment. */
-    public Timestamp getStart() {
-        return start;
+
+    public String getStartDT() {
+        return startDT;
     }
-    /** Sets the start time of the appointment. */
-    public void setStart(Timestamp start) {
-        this.start = start;
+
+    public void setStartDT(String startDT) {
+        this.startDT = startDT;
     }
-    /** Returns the end time of the appointment. */
-    public Timestamp getEnd() {
-        return end;
+
+    public String getEndDT() {
+        return endDT;
     }
-    /** Sets the end time of the appointment. */
-    public void setEnd(Timestamp end) {
-        this.end = end;
+
+    public void setEndDT(String endDT) {
+        this.endDT = endDT;
     }
-    /** Returns the creation datetime of the appointment. */
-    public Timestamp getCreateDate() {
-        return createDate;
+
+    public String getCreateDT() {
+        return createDT;
     }
-    /** Sets the creation datetime of the appointment. */
-    public void setCreateDate(Timestamp createDate) {
-        this.createDate = createDate;
+
+    public void setCreateDT(String createDT) {
+        this.createDT = createDT;
     }
-    /** Returns the creation method of the appointment. */
-    public String getCreatedBy() { return createdBy; }
-    /** Sets the creation method of the appointment. */
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
+
+    public String getCreateMethod() {
+        return createMethod;
     }
-    /** Returns the datetime of the last appointment update. */
-    public Timestamp getLastUpdate() { return lastUpdate; }
-    /** Sets the datetime of the last appointment update. */
-    public void setLastUpdate(Timestamp lastUpdate) {
-        this.lastUpdate = lastUpdate;
+
+    public void setCreateMethod(String createMethod) {
+        this.createMethod = createMethod;
     }
-    /** Returns the most recent method used to update the appointment. */
-    public String getLastUpdatedBy() {
-        return lastUpdatedBy;
+
+    public String getLastUpdateDT() {
+        return lastUpdateDT;
     }
-    /** Sets the most recent method used to update the appointment. */
-    public void setLastUpdatedBy(String lastUpdatedBy) {
-        this.lastUpdatedBy = lastUpdatedBy;
+
+    public void setLastUpdateDT(String lastUpdateDT) {
+        this.lastUpdateDT = lastUpdateDT;
     }
-    /** Returns the customer ID for the appointment. */
+
+    public String getLastUpdateMethod() {
+        return lastUpdateMethod;
+    }
+
+    public void setLastUpdateMethod(String lastUpdateMethod) {
+        this.lastUpdateMethod = lastUpdateMethod;
+    }
+
     public int getCustomerID() {
         return customerID;
     }
-    /** Sets the customer ID for the appointment. */
+
     public void setCustomerID(int customerID) {
         this.customerID = customerID;
     }
-    /** Returns the user ID for the appointment. */
+
     public int getUserID() {
         return userID;
     }
-    /** Sets the user ID for the appointment. */
+
     public void setUserID(int userID) {
         this.userID = userID;
     }
-    /** Returns the contact ID for the appointment. */
+
     public int getContactID() {
         return contactID;
     }
-    /** Sets the contact ID for the appointment. */
+
     public void setContactID(int contactID) {
         this.contactID = contactID;
     }
-
 
 
 }

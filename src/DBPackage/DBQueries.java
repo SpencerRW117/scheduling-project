@@ -3,9 +3,14 @@ package DBPackage;
 import controller.mainScreenController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import model.*;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 /** This class handles all the SELECT, INSERT, UPDATE, and DELETE functions from the database.
  * @Author Spencer Watkins */
@@ -67,61 +72,7 @@ public class DBQueries {
         }
         return l;
     }
-    /** Populates the appointments table with all appointments associated with the logged in user. */
-    public static ObservableList<Appointment> getUserAppointments() throws Exception{
-        ObservableList<Appointment> returnAppointments = FXCollections.observableArrayList();
-        Connection c = JDBC.getConnection();
-        Statement st = c.createStatement();
-        String userQuery = "SELECT * FROM appointments WHERE User_ID = " + mainScreenController.passedUser.getUserID();
-        ResultSet rs = st.executeQuery(userQuery);
-        while(rs.next()){
-            Appointment a = new Appointment(
-                    rs.getInt("Appointment_ID"),
-                    rs.getString("Title"),
-                    rs.getString("Description"),
-                    rs.getString("Location"),
-                    rs.getString("Type"),
-                    rs.getTimestamp("Start"),
-                    rs.getTimestamp("End"),
-                    rs.getTimestamp("Create_Date"),
-                    rs.getString("Created_By"),
-                    rs.getTimestamp("Last_Update"),
-                    rs.getString("Last_Updated_By"),
-                    rs.getInt("Customer_ID"),
-                    rs.getInt("User_ID"),
-                    rs.getInt("Contact_ID"));
-            returnAppointments.add(a);
-        }
-        return returnAppointments;
-    }
-    /** Returns all records in the appointments table as an observable list. */
-    public static ObservableList<Appointment> getAllAppointments() throws Exception{
-        ObservableList<Appointment> returnAppointments = FXCollections.observableArrayList();
-        Connection c = JDBC.getConnection();
-        Statement st = c.createStatement();
-        String userQuery = "SELECT * FROM appointments";
-        ResultSet rs = st.executeQuery(userQuery);
-        while(rs.next()){
-            Appointment a = new Appointment(
-                    rs.getInt("Appointment_ID"),
-                    rs.getString("Title"),
-                    rs.getString("Description"),
-                    rs.getString("Location"),
-                    rs.getString("Type"),
-                    rs.getTimestamp("Start"),
-                    rs.getTimestamp("End"),
-                    rs.getTimestamp("Create_Date"),
-                    rs.getString("Created_By"),
-                    rs.getTimestamp("Last_Update"),
-                    rs.getString("Last_Updated_By"),
-                    rs.getInt("Customer_ID"),
-                    rs.getInt("User_ID"),
-                    rs.getInt("Contact_ID"));
-            returnAppointments.add(a);
-        }
-        return returnAppointments;
-    }
-    /** Reutns all records in the contacts table as an observable list. */
+    /** Returns all records in the contacts table as an observable list. */
     public static ObservableList<Contact> getContacts() throws Exception{
         ObservableList<Contact> returnContacts = FXCollections.observableArrayList();
         String contactQuery = "SELECT * FROM contacts";
@@ -175,32 +126,105 @@ public class DBQueries {
         PreparedStatement ps = JDBC.getConnection().prepareStatement(updateQuery);
         ps.executeUpdate(updateQuery);
     }
-
+    /** Removes a customer from the database. */
     public static void deleteCustomer(Customer c) throws SQLException {
         String deleteQuery = "DELETE FROM customers WHERE Customer_ID=" + c.getID();
         PreparedStatement ps = JDBC.getConnection().prepareStatement(deleteQuery);
         ps.executeUpdate();
     }
 
-    public static void insertNewAppointment(Appointment a) {
+    /** Inserts a new appointment into the database. */
+    public static void insertNewAppointment(Appointment a) throws SQLException {
         int appointmentID = a.getAppointmentID();
         String title = a.getTitle();
-        String desc = a.getDescription();
-        String loc = a.getLocation();
+        String description = a.getDescription();
+        String location = a.getLocation();
         String type = a.getType();
-        Timestamp start = a.getStart();
-        Timestamp end = a.getEnd();
-        Timestamp create = a.getCreateDate();
-        String createdBy = a.getCreatedBy();
-        Timestamp lastUpdate = a.getLastUpdate();
-        String lastUpdatedBy = a.getLastUpdatedBy();
+        String start = a.getStartDT();
+        String end = a.getEndDT();
+        String create =  a.getCreateDT();
+        String createdBy = a.getCreateMethod();
+        String lastUpdate = a.getLastUpdateDT();
+        String lastUpdatedBy = a.getLastUpdateMethod();
         int customerID = a.getCustomerID();
         int userID = a.getUserID();
         int contactID = a.getContactID();
+        String insertQuery = "INSERT INTO appointments " +
+                "VALUES (" + appointmentID + ",'" + title + "','" + description + "','" + location + "','" +
+                type + "','" + start + "','" + end + "','" + create + "','" + createdBy + "','" + lastUpdate +
+                "','" + lastUpdatedBy + "'," + customerID + "," + userID + "," + contactID + ")";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(insertQuery);
+        ps.executeUpdate();
+        return;
+    }
 
-    System.out.println("APPT TO ADD: " + appointmentID + " " + title + " " + desc + " " + loc + " " +
-            type + " " + start + " " + end + " " + create + " " + createdBy + " " + lastUpdate + " " +
-            lastUpdatedBy + " " + customerID + " " + userID + " " + contactID);
+    /** This is a helper function for getAllAppointments() that allows the times to be properly displayed in the local Timezone. */
+    private static String convertToLocalTime(String s){
+        //System.out.println(s); Debugging print
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime ldt = LocalDateTime.parse(s, dtf);
+        ZoneId localTz = ZoneId.systemDefault();
+        ZonedDateTime zdt = ldt.atZone(ZoneId.of("UTC"));
+        ZonedDateTime zdt2 = zdt.withZoneSameInstant(localTz);
+        String ret = dtf.format(zdt2);
+        return ret;
+    }
 
+    /** Returns all records in the appointments table as an observable list. */
+    public static ObservableList<Appointment> getAllAppointments() throws Exception{
+        ObservableList<Appointment> returnAppointments = FXCollections.observableArrayList();
+        ResultSet rs = JDBC.getConnection().createStatement().executeQuery("SELECT * FROM appointments");
+        while(rs.next()){
+            Appointment a = new Appointment(
+                    rs.getInt("Appointment_ID"),
+                    rs.getString("Title"),
+                    rs.getString("Description"),
+                    rs.getString("Location"),
+                    rs.getString("Type"),
+                    convertToLocalTime(rs.getString("Start")),
+                    convertToLocalTime(rs.getString("End")),
+                    rs.getString("Create_Date"),
+                    rs.getString("Created_By"),
+                    rs.getString("Last_Update"),
+                    rs.getString("Last_Updated_By"),
+                    rs.getInt("Customer_ID"),
+                    rs.getInt("User_ID"),
+                    rs.getInt("Contact_ID")
+            );
+            returnAppointments.add(a);
+        }
+        return returnAppointments;
+    }
+
+
+    /** Deletes an appointment from the database. */
+    public static void deleteAppointment(Appointment a) throws SQLException {
+        String deleteQuery = "DELETE FROM appointments WHERE Appointment_ID=" + a.getAppointmentID();
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(deleteQuery);
+        ps.executeUpdate();
+    }
+    /** Checks for overlapping appointments.
+     * @param start, end, customerID
+     * @return true if there are any overlapping times, false if there are not*/
+    public static boolean overlappingAppointments(String start, String end, int customerID) throws SQLException {
+        String startQuery = "SELECT * FROM appointments WHERE Customer_ID="+customerID+"" +
+                " AND Start BETWEEN '" + start + "' AND '" + end + "'";
+        String endQuery = "SELECT * FROM appointments WHERE Customer_ID="+customerID+"" +
+                " AND End BETWEEN '" + start + "' AND '" + end + "'";
+
+        ResultSet startResults = JDBC.getConnection().createStatement().executeQuery(startQuery);
+        ResultSet endResults = JDBC.getConnection().createStatement().executeQuery(endQuery);
+
+        if(!startResults.next() && !endResults.next()){
+
+            return false;
+        }
+        Alert a = new Alert(Alert.AlertType.INFORMATION);
+        a.setTitle("Overlapping Appointments");
+        a.setHeaderText(null);
+        a.setContentText("Your selected appointment times overlap with an existing record for Customer: "+
+                customerID + "\nPlease enter valid appointment times. ");
+        a.show();
+        return true;
     }
 }

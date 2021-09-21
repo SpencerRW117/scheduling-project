@@ -62,8 +62,8 @@ public class mainScreenController implements Initializable {
         appointmentsTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         appointmentsDescCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         appointmentsLocCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        appointmentsStartCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-        appointmentsEndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+        appointmentsStartCol.setCellValueFactory(new PropertyValueFactory<>("startDT"));
+        appointmentsEndCol.setCellValueFactory(new PropertyValueFactory<>("endDT"));
 
         customerIDCol.setCellValueFactory(new PropertyValueFactory<>("ID"));
         customerNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -78,7 +78,22 @@ public class mainScreenController implements Initializable {
         passedUser = u;
     }
     /** Handles deleting an appointment. */
-    public void deleteAppointmentHandler(ActionEvent actionEvent) {
+    public void deleteAppointmentHandler(ActionEvent actionEvent) throws Exception {
+        Appointment a = (Appointment) appointmentsTable.getSelectionModel().getSelectedItem();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        if(a == null){
+            alert.setTitle("Invalid Selection");
+            alert.setContentText("Please select a valid appointment to cancel. ");
+            alert.show();
+            return;
+        }
+        DBQueries.deleteAppointment(a);
+        alert.setTitle("Success!");
+        alert.setContentText("Appointment with id: (" + a.getAppointmentID() + ") of type: (" + a.getType()
+                + ") successfully removed from calendar. " );
+        alert.show();
+        appointmentsTable.setItems(DBQueries.getAllAppointments());
     }
     /** Handles modifying an appointment. */
     public void modifyAppointmentHandler(ActionEvent actionEvent) {
@@ -95,7 +110,7 @@ public class mainScreenController implements Initializable {
         if(c == null){
             alert.setTitle("Invalid Selection");
 
-            alert.setContentText("Please select a valid customer record to update.");
+            alert.setContentText("Please select a valid customer record to delete.");
             alert.show();
             return;
         }

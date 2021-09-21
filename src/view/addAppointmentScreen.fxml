@@ -68,11 +68,11 @@
             <TextField fx:id="appointmentDescriptionField" layoutX="243.0" layoutY="129.0" prefHeight="25.0" prefWidth="171.0" />
             <TextField fx:id="appointmentLocationField" layoutX="243.0" layoutY="154.0" prefHeight="25.0" prefWidth="171.0" />
             <TextField fx:id="appointmentTypeField" layoutX="243.0" layoutY="179.0" prefHeight="25.0" prefWidth="171.0" />
-            <TextField fx:id="appointmentStartField" layoutX="243.0" layoutY="204.0" prefHeight="25.0" prefWidth="171.0" promptText="(UTC) yyyy-mm-dd hh:mm:ss" />
-            <TextField fx:id="appointmentEndField" layoutX="243.0" layoutY="229.0" prefHeight="25.0" prefWidth="171.0" promptText="(UTC) yyyy-mm-dd hh:mm:ss" />
+            <TextField fx:id="appointmentStartField" layoutX="243.0" layoutY="204.0" prefHeight="25.0" prefWidth="171.0" promptText="yyyy-mm-dd hh:mm:ss" />
+            <TextField fx:id="appointmentEndField" layoutX="243.0" layoutY="229.0" prefHeight="25.0" prefWidth="171.0" promptText="yyyy-mm-dd hh:mm:ss" />
             <TextField fx:id="customerIDField" layoutX="243.0" layoutY="254.0" prefHeight="25.0" prefWidth="171.0" />
             <TextField fx:id="userIDField" layoutX="243.0" layoutY="279.0" prefHeight="25.0" prefWidth="171.0" />
-            <ComboBox fx:id="contactComboBox" layoutX="242.0" layoutY="304.0" onAction="#getContactIDFromName" prefHeight="25.0" prefWidth="171.0" promptText="Select Contact Name..." />
+            <ComboBox fx:id="contactComboBox" layoutX="242.0" layoutY="304.0" prefHeight="25.0" prefWidth="171.0" promptText="Select Contact Name..." />
             <Button fx:id="submitButton" layoutX="119.0" layoutY="414.0" mnemonicParsing="false" onAction="#submitNewAppointment" text="Submit" AnchorPane.bottomAnchor="237.0" AnchorPane.leftAnchor="119.0" />
             <Button fx:id="cancelButton" layoutX="291.0" layoutY="414.0" mnemonicParsing="false" onAction="#cancelNewAppointment" text="Cancel" AnchorPane.bottomAnchor="237.0" AnchorPane.rightAnchor="119.0" />
          </children>
