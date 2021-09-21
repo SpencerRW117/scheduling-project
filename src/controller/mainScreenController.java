@@ -1,5 +1,6 @@
 package controller;
 
+import DBPackage.DBQueries;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -15,15 +17,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
 import model.Customer;
-import model.JDBC;
+import DBPackage.JDBC;
 import model.User;
 
-import javax.swing.plaf.nimbus.State;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ResourceBundle;
 
@@ -35,7 +35,7 @@ public class mainScreenController implements Initializable {
     public Button deleteCustomerButton;
     public Button modifyCustomerButton;
     public Button customerAddButton;
-    private static User passedUser = null;
+    public static User passedUser = null;
     public TableColumn appointmentsTitleCol;
     public TableColumn appointmentsDescCol;
     public TableColumn appointmentsLocCol;
@@ -48,13 +48,14 @@ public class mainScreenController implements Initializable {
     public TableColumn customerAddressCol;
     public TableColumn customerPostalCol;
     public TableColumn customerPhoneCol;
+    public TableColumn customerDivCol;
 
     @Override
     /** Initializer method for the logged in account. */
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            appointmentsTable.setItems(getUserAppointments());
-            customersTable.setItems(getCustomers());
+            appointmentsTable.setItems(DBQueries.getAllAppointments());
+            customersTable.setItems(DBQueries.getCustomers());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -69,6 +70,7 @@ public class mainScreenController implements Initializable {
         customerAddressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
         customerPostalCol.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        customerDivCol.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
     }
 
     /** Imports the user from the login page. */
@@ -82,13 +84,52 @@ public class mainScreenController implements Initializable {
     public void modifyAppointmentHandler(ActionEvent actionEvent) {
     }
     /** Handles adding an appointment. */
-    public void addAppointmentHandler(ActionEvent actionEvent) {
+    public void addAppointmentHandler(ActionEvent actionEvent) throws IOException {
+        gotoAddAppointmentScreen(actionEvent);
     }
     /** Handles deleting a customer. */
-    public void deleteCustomerHandler(ActionEvent actionEvent) {
+    public void deleteCustomerHandler(ActionEvent actionEvent) throws Exception {
+        Customer c = (Customer) customersTable.getSelectionModel().getSelectedItem();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        if(c == null){
+            alert.setTitle("Invalid Selection");
+
+            alert.setContentText("Please select a valid customer record to update.");
+            alert.show();
+            return;
+        }
+        for(Appointment a : DBQueries.getAllAppointments()){
+            if(a.getCustomerID() == c.getID()){
+                alert.setTitle("Foreign Key Collision");
+
+                alert.setContentText("The selected customer is associated with one or more existing appointments.\n"+
+                        "Please delete all appointments associated with Customer ID: " + c.getID() + " before attempting to delete the customer record.");
+                alert.show();
+                return;
+            }
+        }
+
+        DBQueries.deleteCustomer(c);
+        alert.setTitle("Success");
+        alert.setContentText("Customer ID: " + c.getID() + " successfully removed from the database.");
+        alert.show();
+        customersTable.setItems(DBQueries.getCustomers());
+
     }
     /** Handles modifying a customer. */
-    public void modifyCustomerHandler(ActionEvent actionEvent) {
+    public void modifyCustomerHandler(ActionEvent actionEvent) throws IOException {
+        Customer c = (Customer) customersTable.getSelectionModel().getSelectedItem();
+        if(c == null){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Invalid Selection");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a valid customer record to update.");
+            alert.show();
+            return;
+        }
+        modifyCustomerController.passTheCustomer(c);
+        gotoModifyCustomerScreen(actionEvent);
     }
     /** Handles adding a customer. */
     public void addCustomerHandler(ActionEvent actionEvent) throws IOException {
@@ -103,54 +144,24 @@ public class mainScreenController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
-    /** Populates the appointments table with all appointments associated with the logged in user. */
-    private ObservableList<Appointment> getUserAppointments() throws Exception{
-        ObservableList<Appointment> returnAppointments = FXCollections.observableArrayList();
-        Connection c = JDBC.getConnection();
-        Statement st = c.createStatement();
-        String userQuery = "SELECT * FROM appointments WHERE User_ID = " + passedUser.getUserID();
-        ResultSet rs = st.executeQuery(userQuery);
-        while(rs.next()){
-            Appointment a = new Appointment(
-                    rs.getInt("Appointment_ID"),
-                    rs.getString("Title"),
-                    rs.getString("Description"),
-                    rs.getString("Location"),
-                    rs.getString("Type"),
-                    rs.getTimestamp("Start"),
-                    rs.getTimestamp("End"),
-                    rs.getTimestamp("Create_Date"),
-                    rs.getString("Created_By"),
-                    rs.getTimestamp("Last_Update"),
-                    rs.getString("Last_Updated_By"),
-                    rs.getInt("Customer_ID"),
-                    rs.getInt("User_ID"),
-                    rs.getInt("Contact_ID"));
-            returnAppointments.add(a);
-        }
-        return returnAppointments;
+    /** Displays the modify customer form. */
+    private void gotoModifyCustomerScreen(ActionEvent actionEvent) throws IOException{
+        Parent root = FXMLLoader.load(getClass().getResource("/view/modifyCustomerScreen.fxml"));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 474, 699);
+        stage.setTitle("Scheduling Software");
+        stage.setScene(scene);
+        stage.show();
     }
-    private ObservableList<Customer> getCustomers() throws Exception{
-        ObservableList<Customer> returnCustomers = FXCollections.observableArrayList();
-        Connection c = JDBC.getConnection();
-        Statement st = c.createStatement();
-        String query = "SELECT * FROM customers";
-        ResultSet rs = st.executeQuery(query);
-        while(rs.next()){
-            Customer tempCus = new Customer(
-                    rs.getInt("Customer_ID"),
-                    rs.getString("Customer_Name"),
-                    rs.getString("Address"),
-                    rs.getString("Postal_Code"),
-                    rs.getString("Phone"),
-                    rs.getTimestamp("Create_Date"),
-                    rs.getString("Created_By"),
-                    rs.getTimestamp("Last_Update"),
-                    rs.getString("Last_Updated_By"),
-                    rs.getInt("Division_ID"));
-            returnCustomers.add(tempCus);
-        }
-        return returnCustomers;
+    /** Displays the add appointment form. */
+    private void gotoAddAppointmentScreen(ActionEvent actionEvent) throws IOException{
+        Parent root = FXMLLoader.load(getClass().getResource("/view/addAppointmentScreen.fxml"));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 474, 699);
+        stage.setTitle("Scheduling Software");
+        stage.setScene(scene);
+        stage.show();
     }
+
 
 }

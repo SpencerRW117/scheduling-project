@@ -1,5 +1,11 @@
 package controller;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+
+
 import DBPackage.DBQueries;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,7 +35,7 @@ import java.util.ResourceBundle;
 
 /** This class handles all the functionality for addCustomerScreen.fxml.
  * @Author Spencer Watkins */
-public class addCustomerController implements Initializable {
+public class modifyCustomerController implements Initializable {
     public TextField customerIDField;
     public TextField customerNameField;
     public TextField customerAddressField;
@@ -39,18 +45,24 @@ public class addCustomerController implements Initializable {
     public ComboBox customerRegionCombo;
     public Button submitButton;
     public Button cancelButton;
+    private static Customer passedCustomer = null;
 
     /** Initializer method, sets the countries combo box to names selected from the database. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             customerCountryCombo.setItems(getCountryNames());
+            customerNameField.setText(passedCustomer.getName());
+            customerAddressField.setText(passedCustomer.getAddress());
+            customerPostalField.setText(passedCustomer.getPostalCode());
+            customerPhoneField.setText(passedCustomer.getPhoneNumber());
         } catch (Exception throwables) {
             throwables.printStackTrace();
         }
-
-
     }
+
+    public static void passTheCustomer(Customer c) {passedCustomer = c;}
+
     /** Gets the names from the list of Country records to be displayed in the combo box. */
     private ObservableList<String> getCountryNames() throws Exception {
         ObservableList<String> names = FXCollections.observableArrayList();
@@ -91,26 +103,15 @@ public class addCustomerController implements Initializable {
         }
         return 0;
     }
-    /** Generates a new ID that is always 1 larger than the largest customer ID. */
-    private int newIDGen() throws Exception {
-        ObservableList<Customer> customers = DBQueries.getCustomers();
-        int temp = 0;
-        for (int i = 0; i < customers.size(); i++){
-            if(customers.get(i).getID() > temp){
-                temp = customers.get(i).getID();
-            }
-        }
-        return temp + 1;
-    }
     /** Handles submission of the new customer form into the database and returns to the dashboard. */
-    public void submitNewCustomer(ActionEvent actionEvent) throws Exception {
+    public void submitUpdatedCustomer(ActionEvent actionEvent) throws Exception {
         java.util.Date date = new Date();
         Timestamp curr = new Timestamp(date.getTime());
 
-        int newID = newIDGen();
+        int newID = passedCustomer.getID();
         String newName = customerNameField.getText();
         String newAddress = customerAddressField.getText();
-        String newpostal = customerPostalField.getText();
+        String newPostal = customerPostalField.getText();
         String newPhone = customerPhoneField.getText();
         Timestamp createDate = curr;
         String createdBy = "user";
@@ -118,7 +119,7 @@ public class addCustomerController implements Initializable {
         String lastUpdatedBy = "user";
         int newDivID = getNewDivID();
 
-        if(newName.equals("") || newAddress.equals("") || newpostal.equals("") || newPhone.equals("") || newDivID == 0){
+        if(newName.equals("") || newAddress.equals("") || newPostal.equals("") || newPhone.equals("") || newDivID == 0){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Missing Information");
             alert.setHeaderText(null);
@@ -127,9 +128,9 @@ public class addCustomerController implements Initializable {
             return;
         }
 
-        Customer c = new Customer(newID, newName, newAddress, newpostal, newPhone, createDate,
-                                  createdBy, lastUpdate, lastUpdatedBy, newDivID);
-        DBQueries.insertNewCustomer(c);
+        Customer c = new Customer(newID, newName, newAddress, newPostal, newPhone, createDate,
+                createdBy, lastUpdate, lastUpdatedBy, newDivID);
+        DBQueries.updateCustomer(c);
         goToMainScreen(actionEvent);
 
     }

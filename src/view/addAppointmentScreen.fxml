@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="706.0" prefWidth="492.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.addAppointmentController">
+   <children>
+      <AnchorPane layoutX="22.0" layoutY="16.0" prefHeight="677.0" prefWidth="456.0" style="-fx-border-style: solid; -fx-border-width: 2px; -fx-border-color: black;" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+         <children>
+            <Label layoutX="146.0" layoutY="14.0" text="Add Appointment" underline="true">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="22.0" layoutY="79.0" text="Appointment ID" underline="true" AnchorPane.bottomAnchor="572.0">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="24.0" layoutY="118.0" text="Title" underline="true" AnchorPane.bottomAnchor="545.0">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="24.0" layoutY="129.0" text="Description" underline="true">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="24.0" layoutY="154.0" text="Location" underline="true">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="24.0" layoutY="179.0" text="Type" underline="true">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="24.0" layoutY="204.0" text="Start Date/Time" underline="true">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="24.0" layoutY="229.0" text="End Date/Time" underline="true">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="24.0" layoutY="254.0" text="Customer ID" underline="true">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="24.0" layoutY="279.0" text="User ID" underline="true">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="24.0" layoutY="304.0" text="Contact" underline="true">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <TextField fx:id="appointmentIDField" disable="true" layoutX="242.0" layoutY="79.0" prefHeight="25.0" prefWidth="171.0" promptText="Disabled (Auto Gen)" />
+            <TextField fx:id="appointmentTitleField" layoutX="243.0" layoutY="104.0" prefHeight="25.0" prefWidth="171.0" />
+            <TextField fx:id="appointmentDescriptionField" layoutX="243.0" layoutY="129.0" prefHeight="25.0" prefWidth="171.0" />
+            <TextField fx:id="appointmentLocationField" layoutX="243.0" layoutY="154.0" prefHeight="25.0" prefWidth="171.0" />
+            <TextField fx:id="appointmentTypeField" layoutX="243.0" layoutY="179.0" prefHeight="25.0" prefWidth="171.0" />
+            <TextField fx:id="appointmentStartField" layoutX="243.0" layoutY="204.0" prefHeight="25.0" prefWidth="171.0" promptText="(UTC) yyyy-mm-dd hh:mm:ss" />
+            <TextField fx:id="appointmentEndField" layoutX="243.0" layoutY="229.0" prefHeight="25.0" prefWidth="171.0" promptText="(UTC) yyyy-mm-dd hh:mm:ss" />
+            <TextField fx:id="customerIDField" layoutX="243.0" layoutY="254.0" prefHeight="25.0" prefWidth="171.0" />
+            <TextField fx:id="userIDField" layoutX="243.0" layoutY="279.0" prefHeight="25.0" prefWidth="171.0" />
+            <ComboBox fx:id="contactComboBox" layoutX="242.0" layoutY="304.0" onAction="#getContactIDFromName" prefHeight="25.0" prefWidth="171.0" promptText="Select Contact Name..." />
+            <Button fx:id="submitButton" layoutX="119.0" layoutY="414.0" mnemonicParsing="false" onAction="#submitNewAppointment" text="Submit" AnchorPane.bottomAnchor="237.0" AnchorPane.leftAnchor="119.0" />
+            <Button fx:id="cancelButton" layoutX="291.0" layoutY="414.0" mnemonicParsing="false" onAction="#cancelNewAppointment" text="Cancel" AnchorPane.bottomAnchor="237.0" AnchorPane.rightAnchor="119.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

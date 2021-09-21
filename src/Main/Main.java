@@ -5,10 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import model.JDBC;
+import DBPackage.JDBC;
 
 import java.sql.*;
-import java.util.Locale;
 
 public class Main extends Application {
 

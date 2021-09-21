@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="699.0" prefWidth="474.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.modifyCustomerController">
+    <children>
+        <AnchorPane layoutX="137.0" layoutY="25.0" prefHeight="656.0" prefWidth="200.0" style="-fx-border-style: solid; -fx-border-width: 2px; border-colo: black;" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+            <children>
+                <Label layoutX="155.0" layoutY="14.0" text="Update Customer" underline="true">
+                    <font>
+                        <Font name="System Bold" size="20.0" />
+                    </font>
+                </Label>
+                <Label layoutX="73.0" layoutY="69.0" text="Customer ID" underline="true">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <Label layoutX="73.0" layoutY="98.0" text="Name" underline="true">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <Label layoutX="73.0" layoutY="126.0" text="Address" underline="true">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <Label layoutX="73.0" layoutY="157.0" text="Postal Code" underline="true">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <Label layoutX="73.0" layoutY="189.0" text="Phone Number" underline="true">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="customerIDField" disable="true" layoutX="216.0" layoutY="67.0" promptText="Disabled: Auto Gen" />
+                <TextField fx:id="customerNameField" layoutX="216.0" layoutY="96.0" />
+                <TextField fx:id="customerAddressField" layoutX="216.0" layoutY="124.0" />
+                <TextField fx:id="customerPostalField" layoutX="216.0" layoutY="155.0" />
+                <TextField fx:id="customerPhoneField" layoutX="216.0" layoutY="187.0" />
+                <ComboBox fx:id="customerCountryCombo" layoutX="216.0" layoutY="223.0" onAction="#setRegionNames" prefHeight="25.0" prefWidth="149.0" promptText="Select Country..." />
+                <Label layoutX="73.0" layoutY="226.0" text="Country" underline="true">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <Label layoutX="73.0" layoutY="258.0" text="Region" underline="true">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <ComboBox fx:id="customerRegionCombo" layoutX="216.0" layoutY="256.0" prefHeight="25.0" prefWidth="149.0" promptText="Select Region..." />
+                <Button fx:id="submitButton" layoutX="88.0" layoutY="412.0" mnemonicParsing="false" onAction="#submitUpdatedCustomer" text="Submit" AnchorPane.bottomAnchor="232.0" />
+                <Button fx:id="cancelButton" layoutX="264.0" layoutY="412.0" mnemonicParsing="false" onAction="#cancelNewCustomer" text="Cancel" AnchorPane.bottomAnchor="232.0" />
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

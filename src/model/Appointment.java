@@ -60,9 +60,7 @@ public class Appointment {
         return description;
     }
     /** Sets the appointment description. */
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public void setDescription(String description) { this.description = description; }
     /** Returns the appointment location. */
     public String getLocation() {
         return location;
@@ -104,17 +102,13 @@ public class Appointment {
         this.createDate = createDate;
     }
     /** Returns the creation method of the appointment. */
-    public String getCreatedBy() {
-        return createdBy;
-    }
+    public String getCreatedBy() { return createdBy; }
     /** Sets the creation method of the appointment. */
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
     /** Returns the datetime of the last appointment update. */
-    public Timestamp getLastUpdate() {
-        return lastUpdate;
-    }
+    public Timestamp getLastUpdate() { return lastUpdate; }
     /** Sets the datetime of the last appointment update. */
     public void setLastUpdate(Timestamp lastUpdate) {
         this.lastUpdate = lastUpdate;
