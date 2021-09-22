@@ -21,6 +21,16 @@ public class Appointment {
     private int customerID;
     private int userID;
     private int contactID;
+    /** Used for converting from Contact ID to Contact Name on the full appointment details page. */
+    private String contactName;
+    /** Returns the contact name. */
+    public String getContactName() {
+        return contactName;
+    }
+    /** Ses the contact name. */
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
 
     /** Constructor for the appointment class. */
     public Appointment(int appointmentID, String title, String description, String location, String type, String startDT,
@@ -40,7 +50,6 @@ public class Appointment {
         this.customerID = customerID;
         this.userID = userID;
         this.contactID = contactID;
-
 
     }
     /** Returns the appointment ID. */

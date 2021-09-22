@@ -13,7 +13,7 @@
       </Label>
       <AnchorPane layoutX="14.0" layoutY="270.0" prefHeight="244.0" prefWidth="580.0" style="-fx-border-style: solid; -fx-border-width: 2px; -fx-border-color: black;" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="312.0" AnchorPane.topAnchor="270.0">
          <children>
-            <Label layoutX="18.0" layoutY="18.0" prefHeight="29.0" prefWidth="162.0" text="Appointments" underline="true" AnchorPane.bottomAnchor="209.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="402.0" AnchorPane.topAnchor="16.0">
+            <Label layoutX="18.0" layoutY="18.0" prefHeight="29.0" prefWidth="162.0" text="Your Appointments" underline="true" AnchorPane.bottomAnchor="209.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="402.0" AnchorPane.topAnchor="16.0">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
@@ -25,8 +25,8 @@
                <columns>
                   <TableColumn fx:id="appointmentsTitleCol" prefWidth="111.0" text="Title" />
                   <TableColumn fx:id="appointmentsDescCol" prefWidth="111.0" text="Description" />
-                  <TableColumn fx:id="appointmentsLocCol" prefWidth="111.0" text="Location" />
-                  <TableColumn fx:id="appointmentsStartCol" prefWidth="111.0" text="Start Time" />
+                  <TableColumn fx:id="appointmentsLocCol" prefWidth="83.0" text="Location" />
+                  <TableColumn fx:id="appointmentsStartCol" prefWidth="139.0" text="Start Time" />
                   <TableColumn fx:id="appointmentsEndCol" prefWidth="111.0" text="End Time" />
                </columns>
             </TableView>
@@ -61,7 +61,7 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <VBox layoutX="21.0" layoutY="111.0" prefHeight="237.0" prefWidth="245.0" spacing="10.0" >
+            <VBox layoutX="21.0" layoutY="111.0" prefHeight="237.0" prefWidth="245.0" spacing="10.0">
                <children>
                   <Button fx:id="fullAppointmentDataButton" mnemonicParsing="false" onAction="#gotoFullAppointmentData" prefHeight="39.0" prefWidth="249.0" text="View Full Appointment Data" />
                   <Button fx:id="appointmentReports" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#gotoAppointmentReports" prefHeight="39.0" prefWidth="249.0" text="Appointment Reports" />

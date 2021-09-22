@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="626.0" prefWidth="1170.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.contactScheduleScreenController">
+   <children>
+      <AnchorPane layoutX="428.0" layoutY="145.0" prefHeight="200.0" prefWidth="200.0" style="-fx-border-style: solid; -fx-border-width: 2px; -fx-border-color: black;" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+         <children>
+            <Label layoutX="484.0" layoutY="14.0" text="Contact Schedules" underline="true">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <TableView fx:id="appointmentsTable" layoutX="19.0" layoutY="59.0" prefHeight="523.0" prefWidth="825.0" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="17.0" AnchorPane.topAnchor="54.0">
+              <columns>
+                <TableColumn fx:id="appointmentIDCol" prefWidth="106.0" text="Appointment ID" />
+                <TableColumn fx:id="titleCol" prefWidth="99.0" text="Title" />
+                  <TableColumn fx:id="typeCol" prefWidth="89.0" text="Type" />
+                  <TableColumn fx:id="descriptionCol" prefWidth="137.0" text="Description" />
+                  <TableColumn fx:id="startCol" prefWidth="141.0" text="Start" />
+                  <TableColumn fx:id="endCol" prefWidth="142.0" text="End" />
+                  <TableColumn fx:id="customerIdCol" prefWidth="110.0" text="Customer ID" />
+              </columns>
+            </TableView>
+            <AnchorPane layoutX="890.0" layoutY="58.0" prefHeight="521.0" prefWidth="251.0" style="-fx-border-style: solid; -fx-border-width: 2px; border-color: black;" AnchorPane.bottomAnchor="19.0" AnchorPane.rightAnchor="19.0" AnchorPane.topAnchor="56.0">
+               <children>
+                  <ComboBox fx:id="contactCombo" layoutX="51.0" layoutY="167.0" onAction="#setContactAppointments" prefWidth="150.0" promptText="Select Company Contact..." AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
+                  <Label alignment="CENTER" text="Controls" underline="true" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="backButton" layoutX="50.0" layoutY="294.0" mnemonicParsing="false" onAction="#gotoMainScreen" text="Back to main screen">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Button>
+               </children></AnchorPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

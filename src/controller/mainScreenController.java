@@ -55,12 +55,14 @@ public class mainScreenController implements Initializable {
     public Button customerReportsButton;
     public Button logoutButton;
 
+
     @Override
     /** Initializer method for the logged in account. */
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            appointmentsTable.setItems(DBQueries.getAllAppointments());
+            appointmentsTable.setItems(filteredUserAppointments());
             customersTable.setItems(DBQueries.getCustomers());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -81,6 +83,16 @@ public class mainScreenController implements Initializable {
     /** Imports the user from the login page. */
     public static void passTheUser(User u){
         passedUser = u;
+    }
+    /** Sets the appointments dashboard table to only show the logged in user's appointments. */
+    private static ObservableList<Appointment> filteredUserAppointments() throws Exception {
+        ObservableList<Appointment> ret = FXCollections.observableArrayList();
+        for(Appointment a : DBQueries.getAllAppointments()){
+            if(a.getUserID() == passedUser.getUserID()){
+                ret.add(a);
+            }
+        }
+        return ret;
     }
     /** Handles deleting an appointment. */
     public void deleteAppointmentHandler(ActionEvent actionEvent) throws Exception {
@@ -187,6 +199,7 @@ public class mainScreenController implements Initializable {
     /** Displays the add appointment form. */
     private void gotoAddAppointmentScreen(ActionEvent actionEvent) throws IOException{
         Parent root = FXMLLoader.load(getClass().getResource("/view/addAppointmentScreen.fxml"));
+        addAppointmentController.passOriginalScreen("");
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 474, 699);
         stage.setTitle("Scheduling Software");
@@ -196,26 +209,38 @@ public class mainScreenController implements Initializable {
     /** Displays the modify appointment form. */
     private void gotoModifyAppointmentScreen(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/view/modifyAppointmentScreen.fxml"));
+        modifyAppointmentController.passOriginalScreen("");
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 474, 699);
         stage.setTitle("Scheduling Software");
         stage.setScene(scene);
         stage.show();
     }
-
-
-    public void gotoFullAppointmentData(ActionEvent actionEvent) {
+    /** Displays the full appointment data screen. */
+    public void gotoFullAppointmentData(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/view/fullAppointmentScreen.fxml"));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 1261, 649);
+        stage.setTitle("Scheduling Software");
+        stage.setScene(scene);
+        stage.show();
     }
-
+    /** Goes to the appointment reports screen. */
     public void gotoAppointmentReports(ActionEvent actionEvent) {
     }
-
-    public void gotoContactSchedules(ActionEvent actionEvent) {
+    /** Goes to the contact schedules screen. */
+    public void gotoContactSchedules(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/view/contactScheduleScreen.fxml"));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 1170, 626);
+        stage.setTitle("Scheduling Software");
+        stage.setScene(scene);
+        stage.show();
     }
-
+    /** Goes to the customer reports page. */
     public void gotoCustomerReports(ActionEvent actionEvent) {
     }
-
+    /** Returns to the login page. */
     public void logOut(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/view/loginScreen.fxml"));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

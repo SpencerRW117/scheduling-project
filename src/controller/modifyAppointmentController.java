@@ -47,9 +47,12 @@ public class modifyAppointmentController implements Initializable {
     public Button submitButton;
     public Button cancelButton;
     public static Appointment passedAppointment = null;
+    public static String passedScreen = "";
 
     /** Brings in the appointment to be modified from the main screen. */
     public static void passTheAppointment(Appointment a) { passedAppointment = a;}
+    /** Brings in the original screen that we came from. */
+    public static void passOriginalScreen (String s ) { passedScreen = s; }
 
     @Override
     /** Initializer method, sets the combo box to the appropriate contact names. */
@@ -134,11 +137,21 @@ public class modifyAppointmentController implements Initializable {
         Appointment a = new Appointment(appointmentID, title, description, location, type, start, end,
                 createDate, createdBy, lastUpdate, lastUpdatedBy, customerID, userId, contactID);
         DBQueries.updateAppointment(a);
-        goToMainScreen(actionEvent);
+        if(passedScreen.equals("Full Appointment")){
+            goToFullAppointmentScreen(actionEvent);
+        }
+        else {
+            goToMainScreen(actionEvent);
+        }
     }
     /** Cancels the New Appointment form and returns to the main screen. */
     public void cancelNewAppointment(ActionEvent actionEvent) throws IOException {
-        goToMainScreen(actionEvent);
+        if(passedScreen.equals("Full Appointment")){
+            goToFullAppointmentScreen(actionEvent);
+        }
+        else {
+            goToMainScreen(actionEvent);
+        }
     }
 
     /** Redirects to the main dashboard. */
@@ -146,6 +159,15 @@ public class modifyAppointmentController implements Initializable {
         Parent root = FXMLLoader.load(getClass().getResource("/view/mainScreen.fxml"));
         Stage stage = (Stage) ((Node) a.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 906, 537);
+        stage.setTitle("Scheduling Software");
+        stage.setScene(scene);
+        stage.show();
+    }
+    /** Returns to the full appointment details screen if that's where we came from. */
+    private void goToFullAppointmentScreen(ActionEvent a ) throws IOException{
+        Parent root = FXMLLoader.load(getClass().getResource("/view/fullAppointmentScreen.fxml"));
+        Stage stage = (Stage) ((Node) a.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 1261, 649);
         stage.setTitle("Scheduling Software");
         stage.setScene(scene);
         stage.show();

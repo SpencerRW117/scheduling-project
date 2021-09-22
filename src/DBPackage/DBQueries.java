@@ -188,6 +188,11 @@ public class DBQueries {
                     rs.getInt("User_ID"),
                     rs.getInt("Contact_ID")
             );
+            for(Contact c : getContacts()){
+                if(c.getContactID() == a.getContactID()){
+                    a.setContactName(c.getContactName());
+                }
+            }
             returnAppointments.add(a);
         }
         return returnAppointments;
@@ -273,7 +278,7 @@ public class DBQueries {
                 location + "', Start='" + start + "', End='" + end + "', Create_Date='" + create + "', Created_By='" + createdBy +
                 "', Last_Update='" + lastUpdate + "', Last_Updated_By='" + lastUpdatedBy + "', Customer_ID=" + customerID +
                 ", User_ID=" + userId + ", Contact_ID=" + contactId + " WHERE Appointment_ID=" + appointmentID;
-        System.out.println(updateQuery);
+        //System.out.println(updateQuery);
         PreparedStatement ps = JDBC.getConnection().prepareStatement(updateQuery);
         ps.executeUpdate();
 
