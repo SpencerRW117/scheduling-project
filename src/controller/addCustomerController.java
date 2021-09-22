@@ -60,8 +60,6 @@ public class addCustomerController implements Initializable {
         return names;
     }
 
-
-
     /** Filters and sets the appropriate regions for the selected country upon selection. */
     public void setRegionNames(ActionEvent actionEvent) throws SQLException {
         String selectedCountryName = (String) customerCountryCombo.getValue();

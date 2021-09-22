@@ -20,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import jdk.jshell.spi.ExecutionControlProvider;
 import model.Country;
 import model.Customer;
 import model.FirstLevelDivision;
@@ -56,13 +57,33 @@ public class modifyCustomerController implements Initializable {
             customerAddressField.setText(passedCustomer.getAddress());
             customerPostalField.setText(passedCustomer.getPostalCode());
             customerPhoneField.setText(passedCustomer.getPhoneNumber());
+            customerCountryCombo.setValue(countryIDToName());
+            customerRegionCombo.setValue(regionIDToName());
+            setRegionNames();
         } catch (Exception throwables) {
             throwables.printStackTrace();
         }
     }
-
+    /** Brings in the customer to modify from the main screen. */
     public static void passTheCustomer(Customer c) {passedCustomer = c;}
-
+    /** Returns the string valued name associated with the passed in region ID. */
+    public String regionIDToName() throws Exception{
+        int id = passedCustomer.getDivisionID();
+        for(FirstLevelDivision f : DBQueries.getRegions()){
+            if(f.getID() == id){
+                return f.getDivision();
+            }
+        }
+        return "";
+    }
+    /** Determines the appropriate country based on the passed in region ID. */
+    public String countryIDToName() throws Exception{
+        int id = passedCustomer.getDivisionID();
+        if (id > 0 && id < 55) { return "U.S";}
+        else if (id > 55 && id < 80) {return "Canada";}
+        else if (id > 80) {return "UK";}
+        else return "";
+    }
     /** Gets the names from the list of Country records to be displayed in the combo box. */
     private ObservableList<String> getCountryNames() throws Exception {
         ObservableList<String> names = FXCollections.observableArrayList();
@@ -71,11 +92,8 @@ public class modifyCustomerController implements Initializable {
         }
         return names;
     }
-
-
-
     /** Filters and sets the appropriate regions for the selected country upon selection. */
-    public void setRegionNames(ActionEvent actionEvent) throws SQLException {
+    public void setRegionNames() throws SQLException {
         String selectedCountryName = (String) customerCountryCombo.getValue();
         int selectedCountryID = 0;
         //System.out.println(selectedCountryName);

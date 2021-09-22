@@ -96,7 +96,18 @@ public class mainScreenController implements Initializable {
         appointmentsTable.setItems(DBQueries.getAllAppointments());
     }
     /** Handles modifying an appointment. */
-    public void modifyAppointmentHandler(ActionEvent actionEvent) {
+    public void modifyAppointmentHandler(ActionEvent actionEvent) throws IOException {
+        Appointment a = (Appointment) appointmentsTable.getSelectionModel().getSelectedItem();
+        if(a == null){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Invalid Selection");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a valid customer record to update.");
+            alert.show();
+            return;
+        }
+        modifyAppointmentController.passTheAppointment(a);
+        gotoModifyAppointmentScreen(actionEvent);
     }
     /** Handles adding an appointment. */
     public void addAppointmentHandler(ActionEvent actionEvent) throws IOException {
@@ -171,6 +182,15 @@ public class mainScreenController implements Initializable {
     /** Displays the add appointment form. */
     private void gotoAddAppointmentScreen(ActionEvent actionEvent) throws IOException{
         Parent root = FXMLLoader.load(getClass().getResource("/view/addAppointmentScreen.fxml"));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 474, 699);
+        stage.setTitle("Scheduling Software");
+        stage.setScene(scene);
+        stage.show();
+    }
+    /** Displays the modify appointment form. */
+    private void gotoModifyAppointmentScreen(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/view/modifyAppointmentScreen.fxml"));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 474, 699);
         stage.setTitle("Scheduling Software");

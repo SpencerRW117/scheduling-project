@@ -132,7 +132,6 @@ public class DBQueries {
         PreparedStatement ps = JDBC.getConnection().prepareStatement(deleteQuery);
         ps.executeUpdate();
     }
-
     /** Inserts a new appointment into the database. */
     public static void insertNewAppointment(Appointment a) throws SQLException {
         int appointmentID = a.getAppointmentID();
@@ -157,7 +156,6 @@ public class DBQueries {
         ps.executeUpdate();
         return;
     }
-
     /** This is a helper function for getAllAppointments() that allows the times to be properly displayed in the local Timezone. */
     private static String convertToLocalTime(String s){
         //System.out.println(s); Debugging print
@@ -169,7 +167,6 @@ public class DBQueries {
         String ret = dtf.format(zdt2);
         return ret;
     }
-
     /** Returns all records in the appointments table as an observable list. */
     public static ObservableList<Appointment> getAllAppointments() throws Exception{
         ObservableList<Appointment> returnAppointments = FXCollections.observableArrayList();
@@ -195,8 +192,6 @@ public class DBQueries {
         }
         return returnAppointments;
     }
-
-
     /** Deletes an appointment from the database. */
     public static void deleteAppointment(Appointment a) throws SQLException {
         String deleteQuery = "DELETE FROM appointments WHERE Appointment_ID=" + a.getAppointmentID();
@@ -216,7 +211,6 @@ public class DBQueries {
         ResultSet endResults = JDBC.getConnection().createStatement().executeQuery(endQuery);
 
         if(!startResults.next() && !endResults.next()){
-
             return false;
         }
         Alert a = new Alert(Alert.AlertType.INFORMATION);
@@ -226,5 +220,62 @@ public class DBQueries {
                 customerID + "\nPlease enter valid appointment times. ");
         a.show();
         return true;
+    }
+    /** Modified overlappingAppointments(), accounts for the fact that the appointment being modified already exists in the system.
+     * If there is an appointment overlapping the times, and it shares an ID with the appointment being modified, return false. */
+    public static boolean overlappingModified(String start, String end, int customerID, int appointmentID) throws SQLException {
+        String startQuery = "SELECT * FROM appointments WHERE Customer_ID="+customerID+"" +
+                " AND Start BETWEEN '" + start + "' AND '" + end + "'";
+        String endQuery = "SELECT * FROM appointments WHERE Customer_ID="+customerID+"" +
+                " AND End BETWEEN '" + start + "' AND '" + end + "'";
+
+        ResultSet startResults = JDBC.getConnection().createStatement().executeQuery(startQuery);
+        ResultSet endResults = JDBC.getConnection().createStatement().executeQuery(endQuery);
+
+        if(!startResults.next() && !endResults.next()){
+            return false;
+        }
+        while(startResults.next()){
+            if(startResults.getInt("Appointment_ID") == appointmentID){
+                return false;
+            }
+        }
+        while(endResults.next()){
+            if(endResults.getInt("Appointment_ID") == appointmentID){
+                return false;
+            }
+        }
+        Alert a = new Alert(Alert.AlertType.INFORMATION);
+        a.setTitle("Overlapping Appointments");
+        a.setHeaderText(null);
+        a.setContentText("Your selected appointment times overlap with an existing record for Customer: "+
+                customerID + "\nPlease enter valid appointment times. ");
+        a.show();
+        return true;
+    }
+    /** Updates an appointment value in the database selected by its unique appointment ID. */
+    public static void updateAppointment(Appointment a) throws SQLException {
+        int appointmentID = a.getAppointmentID();
+        String title = a.getTitle();
+        String description = a.getDescription();
+        String location = a.getLocation();
+        String start = a.getStartDT();
+        String end = a.getEndDT();
+        String create = a.getCreateDT();
+        String createdBy = a.getCreateMethod();
+        String lastUpdate = a.getLastUpdateDT();
+        String lastUpdatedBy = a.getLastUpdateMethod();
+        int customerID = a.getCustomerID();
+        int userId = a.getUserID();
+        int contactId = a.getContactID();
+
+        String updateQuery = "UPDATE appointments SET Title='" + title + "', Description='" + description + "', Location='" +
+                location + "', Start='" + start + "', End='" + end + "', Create_Date='" + create + "', Created_By='" + createdBy +
+                "', Last_Update='" + lastUpdate + "', Last_Updated_By='" + lastUpdatedBy + "', Customer_ID=" + customerID +
+                ", User_ID=" + userId + ", Contact_ID=" + contactId + " WHERE Appointment_ID=" + appointmentID;
+        System.out.println(updateQuery);
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(updateQuery);
+        ps.executeUpdate();
+
     }
 }
