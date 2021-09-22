@@ -49,6 +49,11 @@ public class mainScreenController implements Initializable {
     public TableColumn customerPostalCol;
     public TableColumn customerPhoneCol;
     public TableColumn customerDivCol;
+    public Button fullAppointmentDataButton;
+    public Button appointmentReports;
+    public Button contactSchedulesButton;
+    public Button customerReportsButton;
+    public Button logoutButton;
 
     @Override
     /** Initializer method for the logged in account. */
@@ -199,4 +204,24 @@ public class mainScreenController implements Initializable {
     }
 
 
+    public void gotoFullAppointmentData(ActionEvent actionEvent) {
+    }
+
+    public void gotoAppointmentReports(ActionEvent actionEvent) {
+    }
+
+    public void gotoContactSchedules(ActionEvent actionEvent) {
+    }
+
+    public void gotoCustomerReports(ActionEvent actionEvent) {
+    }
+
+    public void logOut(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/view/loginScreen.fxml"));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 600, 400);
+        stage.setTitle("Scheduling Software");
+        stage.setScene(scene);
+        stage.show();
+    }
 }
