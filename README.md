@@ -27,7 +27,7 @@ HOW TO RUN THE PROGRAM
     
     Load the project in the appropriate IntelliJ environment and compile/run with the play button. 
 
-#ADDITIONAL REPORT INFORMATION
+ADDITIONAL REPORT INFORMATION
     
     The additional report (Customers Report) displays a report of the number of users in each first level division
     of the selected country. 
