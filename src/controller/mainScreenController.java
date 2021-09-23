@@ -110,7 +110,7 @@ public class mainScreenController implements Initializable {
         alert.setContentText("Appointment with id: (" + a.getAppointmentID() + ") of type: (" + a.getType()
                 + ") successfully removed from calendar. " );
         alert.show();
-        appointmentsTable.setItems(DBQueries.getAllAppointments());
+        appointmentsTable.setItems(filteredUserAppointments());
     }
     /** Handles modifying an appointment. */
     public void modifyAppointmentHandler(ActionEvent actionEvent) throws IOException {
@@ -226,7 +226,13 @@ public class mainScreenController implements Initializable {
         stage.show();
     }
     /** Goes to the appointment reports screen. */
-    public void gotoAppointmentReports(ActionEvent actionEvent) {
+    public void gotoAppointmentReports(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/view/appointmentReportScreen.fxml"));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 455, 520);
+        stage.setTitle("Scheduling Software");
+        stage.setScene(scene);
+        stage.show();
     }
     /** Goes to the contact schedules screen. */
     public void gotoContactSchedules(ActionEvent actionEvent) throws IOException {
@@ -238,7 +244,14 @@ public class mainScreenController implements Initializable {
         stage.show();
     }
     /** Goes to the customer reports page. */
-    public void gotoCustomerReports(ActionEvent actionEvent) {
+    public void gotoCustomerReports(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/view/customerReports.fxml"));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 455, 520);
+        stage.setTitle("Scheduling Software");
+        stage.setScene(scene);
+        stage.show();
+
     }
     /** Returns to the login page. */
     public void logOut(ActionEvent actionEvent) throws IOException {

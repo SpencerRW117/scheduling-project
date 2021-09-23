@@ -16,7 +16,10 @@ import DBPackage.JDBC;
 import model.Appointment;
 import model.User;
 
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -24,6 +27,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 /** This class controls loginScreen.fxml @author Spencer Watkins*/
@@ -69,7 +73,7 @@ public class loginScreenController implements Initializable {
     }
 
     /** Validates the credentials against the database. */
-    private User validateCredentials() throws SQLException {
+    private User validateCredentials() throws SQLException, IOException {
         Connection c = JDBC.getConnection();
         Statement st = c.createStatement();
         String userNameAndPassQuery = "SELECT User_ID, User_Name, Password FROM users";
@@ -84,6 +88,7 @@ public class loginScreenController implements Initializable {
             //System.out.println("STUFF 2: " + currPassword + currUserName); //Debugging print
             if (currUserName.equals(enteredUserName) && currPassword.equals(enteredUserPassword)) {
                 User u = new User(currUserID, currUserName, currPassword);
+                recordLoginAttempt(true);
                 return u;
             }
         }
@@ -92,7 +97,26 @@ public class loginScreenController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText("Invalid login credentials, please enter a valid username and password.");
         alert.show();
+        recordLoginAttempt(false);
         return null;
+    }
+
+    /** Records successful and failed login attempts with current timestamp and writes the information to login_activity.txt. */
+    private void recordLoginAttempt(boolean success) throws IOException {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-mm-dd HH:mm:ss");
+        String now = LocalDateTime.now().format(dtf);
+        String loginAttempt = "Login Attempt at - ";
+        FileWriter fw = new FileWriter("login_activity.txt", true);
+        PrintWriter pw = new PrintWriter(fw);
+        if(success){
+            pw.println(loginAttempt + now + " SUCCESS");
+            pw.close();
+            return;
+        }
+        pw.println(loginAttempt + now + " FAILURE");
+        pw.close();
+        return;
+
     }
 
     /** Changes the scene to the main dashboard. */
