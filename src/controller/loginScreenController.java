@@ -7,10 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import DBPackage.JDBC;
 import model.Appointment;
@@ -28,6 +25,7 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 /** This class controls loginScreen.fxml @author Spencer Watkins*/
@@ -36,6 +34,12 @@ public class loginScreenController implements Initializable {
     public PasswordField loginScreenPasswordField;
     public Button loginScreenSubmitButton;
     public Button loginScreenExitButton;
+    public Label UNlabel;
+    public Label PWLabel;
+    public Label signinLabel;
+    public Label headLabel;
+    private String invalidTitle;
+    private String invalidContent;
 
 
     /** Handles the submit credentials event from the login screen and passes the valid user to the dashboard. */
@@ -93,9 +97,9 @@ public class loginScreenController implements Initializable {
             }
         }
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Invalid Credentials");
+        alert.setTitle(invalidTitle);
         alert.setHeaderText(null);
-        alert.setContentText("Invalid login credentials, please enter a valid username and password.");
+        alert.setContentText(invalidContent);
         alert.show();
         recordLoginAttempt(false);
         return null;
@@ -135,7 +139,21 @@ public class loginScreenController implements Initializable {
     }
 
     @Override
+    /** Initializer method for the login screen, takes care of handling login form translation to French. */
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        Locale loc = Locale.getDefault();
+
+        ResourceBundle rb = ResourceBundle.getBundle("properties/Nat", loc);
+        headLabel.setText(rb.getString("Scheduling") + " " + rb.getString("Software"));
+        signinLabel.setText(rb.getString("Sign") + " " + rb.getString("in"));
+        UNlabel.setText(rb.getString("Username"));
+        loginScreenUsernameField.setPromptText(rb.getString("Enter") + " " + rb.getString("Username"));
+        PWLabel.setText(rb.getString("Password"));
+        loginScreenPasswordField.setPromptText(rb.getString("Enter") + " " + rb.getString("Password"));
+        loginScreenSubmitButton.setText(rb.getString("Submit"));
+        loginScreenExitButton.setText(rb.getString("Exit"));
+        invalidContent = rb.getString("invalidContent");
+        invalidTitle = rb.getString("invalidTitle");
 
     }
 }

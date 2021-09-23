@@ -8,22 +8,22 @@
    <children>
       <AnchorPane layoutX="165.0" layoutY="22.0" prefHeight="358.0" prefWidth="256.0" style="-fx-border-style: solid; -fx-border-width: 2px; -fx-border-color: black;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="165.0" AnchorPane.rightAnchor="165.0" AnchorPane.topAnchor="20.0">
          <children>
-            <Label layoutX="32.0" layoutY="14.0" prefHeight="30.0" prefWidth="201.0" text="Scheduling Software" AnchorPane.leftAnchor="32.0" AnchorPane.rightAnchor="32.0">
+            <Label fx:id="headLabel" layoutX="32.0" layoutY="14.0" prefHeight="30.0" prefWidth="201.0" text="Scheduling Software" AnchorPane.leftAnchor="32.0" AnchorPane.rightAnchor="32.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="112.0" layoutY="61.0" text="Sign in:" AnchorPane.leftAnchor="108.0" AnchorPane.rightAnchor="108.0">
+            <Label fx:id="signinLabel" alignment="CENTER" layoutX="68.0" layoutY="61.0" prefHeight="20.0" prefWidth="133.0" text="Sign in:" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
             <TextField fx:id="loginScreenUsernameField" layoutX="61.0" layoutY="131.0" promptText="Enter Username" AnchorPane.leftAnchor="61.0" AnchorPane.rightAnchor="58.0" />
             <PasswordField fx:id="loginScreenPasswordField" layoutX="61.0" layoutY="192.0" promptText="Enter Password" AnchorPane.leftAnchor="61.0" AnchorPane.rightAnchor="58.0" />
-            <Label layoutX="61.0" layoutY="114.0" text="Username:" />
-            <Label layoutX="61.0" layoutY="172.0" text="Password:" />
-            <Button fx:id="loginScreenSubmitButton" layoutX="64.0" layoutY="256.0" mnemonicParsing="false" onAction="#loginScreenSubmitHandler" prefHeight="25.0" prefWidth="56.0" text="Submit" AnchorPane.leftAnchor="61.0" />
-            <Button fx:id="loginScreenExitButton" layoutX="158.0" layoutY="256.0" mnemonicParsing="false" onAction="#exitProgram" prefHeight="25.0" prefWidth="56.0" text="Exit" AnchorPane.rightAnchor="58.0" />
+            <Label fx:id="UNlabel" layoutX="61.0" layoutY="114.0" text="Username:" />
+            <Label fx:id="PWLabel" layoutX="61.0" layoutY="172.0" text="Password:" />
+            <Button fx:id="loginScreenSubmitButton" layoutX="55.0" layoutY="256.0" mnemonicParsing="false" onAction="#loginScreenSubmitHandler" prefHeight="25.0" prefWidth="75.0" text="Submit" AnchorPane.leftAnchor="53.0" />
+            <Button fx:id="loginScreenExitButton" layoutX="158.0" layoutY="256.0" mnemonicParsing="false" onAction="#exitProgram" prefHeight="25.0" prefWidth="75.0" text="Exit" AnchorPane.rightAnchor="43.0" />
          </children>
       </AnchorPane>
    </children>
