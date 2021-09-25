@@ -24,6 +24,11 @@
             <Label fx:id="PWLabel" layoutX="61.0" layoutY="172.0" text="Password:" />
             <Button fx:id="loginScreenSubmitButton" layoutX="55.0" layoutY="256.0" mnemonicParsing="false" onAction="#loginScreenSubmitHandler" prefHeight="25.0" prefWidth="75.0" text="Submit" AnchorPane.leftAnchor="53.0" />
             <Button fx:id="loginScreenExitButton" layoutX="158.0" layoutY="256.0" mnemonicParsing="false" onAction="#exitProgram" prefHeight="25.0" prefWidth="75.0" text="Exit" AnchorPane.rightAnchor="43.0" />
+            <Label fx:id="timeZoneLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="9.0" layoutY="309.0" prefHeight="20.0" prefWidth="252.0" text="Time Zone: " underline="true" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </children>

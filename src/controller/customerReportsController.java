@@ -58,10 +58,12 @@ public class customerReportsController implements Initializable {
         return names;
     }
 
-    /** Sets the items in the report table to be a count of customers per territory in the selected country. Contains lambda. */
+    /** Sets the items in the report table to be a count of customers per territory in the selected country. Contains lambda.
+     * @lambda This executes a complex SQL query that returns a count customers in each region of the selected country.
+     * JUSTIFICATION: Using a single report interface with lambda expressions allows for use-specific modification of SQL queries, without adding excess files to the program. */
     public void setReportTable(ActionEvent actionEvent) throws SQLException {
         String selectedCountry = (String) countryCombo.getValue();
-        /** @lambda This executes a complex SQL query that returns a count customers in each region of the selected country. */
+
         ReportInterface customerReportLambda = () -> {
             ResultSet rs = JDBC.getConnection().createStatement().executeQuery("SELECT Division, Country, COUNT(*) " +
                     " FROM first_level_divisions " +

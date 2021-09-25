@@ -49,14 +49,16 @@ public class appointmentReportController implements Initializable {
 
     }
     /** This filters the reports table by the selected month.
-     * This method includes a lambda expression, described in detail below. */
+     * This method includes a lambda expression, described in detail below.
+     * @lambda This lambda expression is built on the ReportInterface class. Generates a report of appointments that shows the number of appointments
+     * of each type that occur in the selected month.
+     * JUSTIFICATION: Using a single abstract report interface allows the SQL expression contained in the lambda to be modified as needed without further cluttering the code. */
     public void filterByMonth(ActionEvent actionEvent) throws Exception {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String selectedMonthString = (String) monthCombo.getValue();
         Month selectedMonth = Month.valueOf(selectedMonthString);
 
-        /** @lambda This lambda expression is built on the ReportInterface class. Generates a report of appointments that shows the number of appointments
-         * of each type that occur in the selected month.*/
+        /** */
         ReportInterface appointmentReportLambda = () -> {
             ResultSet rs = JDBC.getConnection().createStatement().executeQuery("SELECT Type, Start, COUNT(*) FROM appointments GROUP BY Type");
             ObservableList<Report> ret = FXCollections.observableArrayList();

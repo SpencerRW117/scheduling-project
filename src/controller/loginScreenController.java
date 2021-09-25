@@ -27,6 +27,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 /** This class controls loginScreen.fxml @author Spencer Watkins*/
 public class loginScreenController implements Initializable {
@@ -38,6 +39,7 @@ public class loginScreenController implements Initializable {
     public Label PWLabel;
     public Label signinLabel;
     public Label headLabel;
+    public Label timeZoneLabel;
     private String invalidTitle;
     private String invalidContent;
 
@@ -107,7 +109,7 @@ public class loginScreenController implements Initializable {
 
     /** Records successful and failed login attempts with current timestamp and writes the information to login_activity.txt. */
     private void recordLoginAttempt(boolean success) throws IOException {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-mm-dd HH:mm:ss");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String now = LocalDateTime.now().format(dtf);
         String loginAttempt = "Login Attempt at - ";
         FileWriter fw = new FileWriter("login_activity.txt", true);
@@ -144,6 +146,8 @@ public class loginScreenController implements Initializable {
         Locale loc = Locale.getDefault();
 
         ResourceBundle rb = ResourceBundle.getBundle("properties/Nat", loc);
+        timeZoneLabel.setText(rb.getString("Time") + " " +
+                rb.getString("Zone") + ": "+ TimeZone.getDefault().getDisplayName(false, TimeZone.SHORT));
         headLabel.setText(rb.getString("Scheduling") + " " + rb.getString("Software"));
         signinLabel.setText(rb.getString("Sign") + " " + rb.getString("in"));
         UNlabel.setText(rb.getString("Username"));

@@ -153,6 +153,7 @@ public class DBQueries {
                 type + "','" + start + "','" + end + "','" + create + "','" + createdBy + "','" + lastUpdate +
                 "','" + lastUpdatedBy + "'," + customerID + "," + userID + "," + contactID + ")";
         PreparedStatement ps = JDBC.getConnection().prepareStatement(insertQuery);
+
         ps.executeUpdate();
         return;
     }
@@ -264,6 +265,7 @@ public class DBQueries {
         String title = a.getTitle();
         String description = a.getDescription();
         String location = a.getLocation();
+        String type = a.getType();
         String start = a.getStartDT();
         String end = a.getEndDT();
         String create = a.getCreateDT();
@@ -275,7 +277,7 @@ public class DBQueries {
         int contactId = a.getContactID();
 
         String updateQuery = "UPDATE appointments SET Title='" + title + "', Description='" + description + "', Location='" +
-                location + "', Start='" + start + "', End='" + end + "', Create_Date='" + create + "', Created_By='" + createdBy +
+                location + "', Type='" + type + "', Start='" + start + "', End='" + end + "', Create_Date='" + create + "', Created_By='" + createdBy +
                 "', Last_Update='" + lastUpdate + "', Last_Updated_By='" + lastUpdatedBy + "', Customer_ID=" + customerID +
                 ", User_ID=" + userId + ", Contact_ID=" + contactId + " WHERE Appointment_ID=" + appointmentID;
         //System.out.println(updateQuery);
