@@ -7,8 +7,6 @@ AUTHOR, CONTACT INFORMATION, APPLICATION VERSION, and DATE
     
     Author - Spencer Watkins
     
-    Contact - Email: swat304@my.wgu.edu
-    
     Application Version - 1.0
     
     Date - 2021-09-23 (yyyy-MM-dd)
